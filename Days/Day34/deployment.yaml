@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apple-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apple 
+  template:
+    metadata:
+      labels: 
+        app: apple 
+    spec: 
+      containers:
+      - name: apple-app
+        image: hashicorp/http-echo
+        args: ["-text=apple"]
+        ports:
+        - containerPort: 5678
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: apple-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5678
+    targetPort: 5678
+  selector: 
+    app: apple 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banana-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: banana
+  template:
+    metadata:
+      labels: 
+        app: banana
+    spec: 
+      containers:
+      - name: banana-app
+        image: hashicorp/http-echo
+        args: ["-text=banana"]
+        ports:
+        - containerPort: 5678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: banana-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5678
+    targetPort: 5678
+  selector:
+    app: banana
