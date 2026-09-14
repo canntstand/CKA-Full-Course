@@ -57,15 +57,15 @@ EOF
     apt-get install -y apt-transport-https ca-certificates curl gpg
 
     mkdir -p -m 755 /etc/apt/keyrings
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 
     apt-get update
-    apt-get install -y kubelet=1.35.4-1.1 kubeadm=1.35.4-1.1 kubectl=1.35.4-1.1 --allow-downgrades --allow-change-held-packages
+    apt-get install -y kubelet=1.36.4-1.1 kubeadm=1.36.4-1.1 kubectl=1.36.4-1.1 --allow-downgrades --allow-change-held-packages
     apt-mark hold kubelet kubeadm kubectl
 
     echo "===> [6/6] Configuring crictl..."
-    VERSION="v1.35.0"
+    VERSION="v1.36.0"
     curl -LO "https://github.com/kubernetes-sigs/cri-tools/releases/download/${VERSION}/crictl-${VERSION}-linux-amd64.tar.gz"
     tar -C /usr/local/bin -xzf "crictl-${VERSION}-linux-amd64.tar.gz"
     rm -f "crictl-${VERSION}-linux-amd64.tar.gz"
@@ -89,7 +89,7 @@ EOF
     cp -i /etc/kubernetes/admin.conf /root/.kube/config
 
     echo "===> Installing Calico CNI..."
-    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/manifests/calico.yaml
+    kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.32.2/manifests/calico.yaml
 
     echo "===> Generating Join Command for Workers..."
     kubeadm token create --print-join-command > /tmp/join.sh
