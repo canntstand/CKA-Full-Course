@@ -58,7 +58,7 @@ kubectl drain <node-to-drain> --ignore-daemonsets
 
 ```
 sudo apt-mark unhold kubelet kubectl && \
-sudo apt-get update && sudo apt-get install -y kubelet='1.30.2-1.1' kubectl='1.30.2-1.1' && \
+sudo apt-get update && sudo apt-get install -y kubelet='1.37.0-1.1' kubectl='1.37.0-1.1' && \
 sudo apt-mark hold kubelet kubectl
 ```
 

@@ -52,20 +52,20 @@ EOF
     mkdir -p /opt/cni/bin
     tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.9.1.tgz
 
-    echo "===> [5/6] Installing Kubeadm, Kubelet, Kubectl (v1.36)..."
+    echo "===> [5/6] Installing Kubeadm, Kubelet, Kubectl (v1.37)..."
     apt-get update
     apt-get install -y apt-transport-https ca-certificates curl gpg
 
     mkdir -p -m 755 /etc/apt/keyrings
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 
     apt-get update
-    apt-get install -y kubelet=1.36.4-1.1 kubeadm=1.36.4-1.1 kubectl=1.36.4-1.1 --allow-downgrades --allow-change-held-packages
+    apt-get install -y kubelet=1.37.0-1.1 kubeadm=1.37.0-1.1 kubectl=1.37.0-1.1 --allow-downgrades --allow-change-held-packages
     apt-mark hold kubelet kubeadm kubectl
 
     echo "===> [6/6] Configuring crictl..."
-    VERSION="v1.36.0"
+    VERSION="v1.37.0"
     curl -LO "https://github.com/kubernetes-sigs/cri-tools/releases/download/${VERSION}/crictl-${VERSION}-linux-amd64.tar.gz"
     tar -C /usr/local/bin -xzf "crictl-${VERSION}-linux-amd64.tar.gz"
     rm -f "crictl-${VERSION}-linux-amd64.tar.gz"
@@ -94,6 +94,8 @@ EOF
     echo "===> Generating Join Command for Workers..."
     kubeadm token create --print-join-command > /tmp/join.sh
     chmod +x /tmp/join.sh
+
+    kubectl -n kube-system set env daemonset/calico-node IP_AUTODETECTION_METHOD=cidr=192.168.56.0/24
   SCRIPT
 
   $worker_setup = <<-SCRIPT
