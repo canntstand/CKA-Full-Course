@@ -71,6 +71,7 @@ EOF
     rm -f "crictl-${VERSION}-linux-amd64.tar.gz"
 
     crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
+    sudo usermod -s $(which bash) $USER
   SCRIPT
 
   $master_setup = <<-SCRIPT

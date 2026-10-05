@@ -37,4 +37,7 @@ docker login my-registry:5000 -u myuser -p mypasswd
 cat "time="2026-10-05T10:34:46Z" level=info msg="Error logging in to endpoint, trying next endpoint" endpoint="{https://my-registry:5000 0x2b9f05fa2b40}" error="Get \"https://my-registry:5000/v2/\": tls: failed to verify certificate: x509: certificate signed by unknown authority"
 Get "https://my-registry:5000/v2/": tls: failed to verify certificate: x509: certificate signed by unknown authority"
 
-cat "25:40"
+sudo cp tls.crt /usr/local/share/ca-certificates/tls.crt
+sudo update-ca-certificates
+sudo docker pull nginx
+sudo docker tag nginx:latest my-registry:5000/mynginx:v1
