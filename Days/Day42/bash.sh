@@ -24,3 +24,17 @@ sudo docker run --entrypoint htpasswd httpd:2 -Bbn myuser mypasswd > auth/htpass
 
 kubectl create secret tls certs-secret --cert=$HOME/registry/certs/tls.crt \
 --key $HOME/registry/certs/tls.key
+
+mkdir -r /home/vagrant/repos
+
+cat "APPLY ALL .yaml files"
+
+export REGISTRY_NAME="my-registry"
+export REGISTRY_IP="10.111.43.119"
+cat "add 10.111.43.119 my-registry to /etc/hosts on all vms"
+
+docker login my-registry:5000 -u myuser -p mypasswd
+cat "time="2026-10-05T10:34:46Z" level=info msg="Error logging in to endpoint, trying next endpoint" endpoint="{https://my-registry:5000 0x2b9f05fa2b40}" error="Get \"https://my-registry:5000/v2/\": tls: failed to verify certificate: x509: certificate signed by unknown authority"
+Get "https://my-registry:5000/v2/": tls: failed to verify certificate: x509: certificate signed by unknown authority"
+
+cat "25:40"
